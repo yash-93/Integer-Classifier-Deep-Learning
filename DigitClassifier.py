@@ -11,26 +11,36 @@ import numpy as np
 # print(X_train[1])
 # print(y_train[1])
 
-plt.imshow(X_test[2])
-plt.show()
+# plt.imshow(X_test[2])
+# plt.show()
 
 X_train = X_train.reshape(60000, 28, 28, 1)
 X_test = X_test.reshape(10000, 28, 28, 1)
 
+print(X_train[0].shape)
+
 y_train_one_hot = to_categorical(y_train)
 y_test_one_hot = to_categorical(y_test)
 
-# model = Sequential()
-# model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(28, 28, 1)))
-# model.add(Conv2D(32, kernel_size=3, activation='relu'))
-# model.add(Flatten())
-# model.add(Dense(10, activation='softmax'))
+model = Sequential()
+model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(28, 28, 1)))
+model.add(Conv2D(32, kernel_size=3, activation='relu'))
+model.add(Flatten())
+model.add(Dense(10, activation='softmax'))
 
-# model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.summary()
 
 # hist = model.fit(X_train, y_train_one_hot, validation_data=(X_test, y_test_one_hot), epochs=3)
 
 # model.save('DigitClassifierModel.h5')
+
+# model_json = model.to_json()
+# with open("model-bw.json", "w") as json_file:
+#     json_file.write(model_json)
+# model.save_weights('model-bw.h5')
+
+# joblib.dump(model, 'modelsaved.pkl')
 
 # plt.plot(hist.history['acc'])
 # plt.plot(hist.history['val_acc'])
@@ -40,10 +50,10 @@ y_test_one_hot = to_categorical(y_test)
 # plt.legend(['Train', 'Val'], loc='upper left')
 # plt.show()
 
-model = load_model('DigitClassifierModel.h5')
-
-predictions = model.predict(X_test[:4])
-print(predictions)
-
-print(np.argmax(predictions, axis=1))
-print(y_test[:4])
+# model = load_model('DigitClassifierModel.h5')
+#
+# predictions = model.predict(X_test[:4])
+# print(predictions)
+#
+# print(np.argmax(predictions, axis=1))
+# print(y_test[:4])
