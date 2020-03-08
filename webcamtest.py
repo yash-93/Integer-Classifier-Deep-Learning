@@ -1,47 +1,40 @@
+from tensorflow.keras.models import load_model
+from resizeimage import resizeimage
+from PIL import Image
 import numpy as np
 import cv2
-import sys, os
-import pickle
-from tensorflow.keras.models import model_from_json, load_model
+import matplotlib.pyplot as plt
 
-width = 640
-height = 480
-
-model = load_model("DigitClassifierModel.h5")
+model = load_model('mnistCNN.h5')
 cap = cv2.VideoCapture(0)
-
-# pickle_in = open('savedmodel.p', 'rb')
-# model = pickle.load(pickle_in)
-
-
-
-# json_file = open("model-bw.json", "r")
-# model_json = json_file.read()
-# json_file.close()
-# loaded_model = model_from_json(model_json)
-# # load weights into new model
-# loaded_model.load_weights("model-bw.h5")
-# print("Loaded model from disk")
-
+count = 0
 while True:
     success, imgOriginal = cap.read()
-    img = cv2.cvtColor(imgOriginal, cv2.COLOR_BGR2GRAY)
-    img = cv2.resize(img, (28, 28))
-    pred = model.predict(np.array([img]))
-    print("********************** => ", pred)
+    cv2.imwrite('test_frame' + str(count) + '.jpg', imgOriginal)
+    count += 1
 
-    # img = np.array(imgOriginal)
-    # img = cv2.resize(img, (28, 28))
-    # print(img.shape)
-    # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # img = img/255
-    # cv2.imshow("", img)
-    # img = img.reshape(1, 28, 28)
-    # print(img.shape)
-    # classIndex = int(loaded_model.predict(img))
-    # print(classIndex)
+    # with open('test_frame.jpg', 'r+b') as f:
+    #     with Image.open(f) as image:
+    #             cover = resizeimage.resize_cover(image, [28, 28])
+    #             cover.save('resized.jpg', image.format)
+    #
+    # img = Image.open('resized.jpg').convert("L")
+    # im2arr = np.array(img)
+    # im2arr_new = 255 - im2arr
+    # plt.imsave('check.jpg', im2arr_new, cmap='gray')
+    #
+    # img = Image.open('check.jpg').convert("L")
+    # im2arr = np.array(img)
+    # im2arr = im2arr.reshape(1, 28, 28, 1).astype('float32')
+    # im2arr /= 255
+    #
+    # pred = model.predict_classes(im2arr)
+    # print(pred)
+
+    cv2.imshow('frame', imgOriginal)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
 cv2.destroyAllWindows()
+
